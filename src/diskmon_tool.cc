@@ -33,6 +33,7 @@ int main(int argc, char** argv) {
         ret = select(fd+1, &fds, NULL, NULL, &tv);
         if (ret > 0 && FD_ISSET(fd, &fds)) {
             dev = udev_monitor_receive_device(mon);
+            auto dev_ = udevpp::Device(dev);
             if (dev) {
                 printf("I: ACTION=%s\n", udev_device_get_action(dev));
                 printf("I: DEVNAME=%s\n", udev_device_get_sysname(dev));

@@ -8,9 +8,9 @@
 
 namespace udevpp {
 
-class Device {
+class Device: public util::RawPointerWrapper<udev_device, udev_device_unref> {
 public:
-    Device(udev_device* uptr);
+    using util::RawPointerWrapper<udev_device, udev_device_unref>::RawPointerWrapper;
 
     auto parent() const -> optional<Device>;
 
@@ -33,8 +33,6 @@ private:
             return {};
         return {std::string(p)};
     }
-
-    std::shared_ptr<udev_device> raw_;
 };
 
 }

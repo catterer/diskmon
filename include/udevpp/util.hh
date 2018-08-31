@@ -13,17 +13,21 @@ namespace udevpp { using std::experimental::optional; }
 #endif
 
 namespace udevpp {
+namespace util {
 
-template<typename T, void (*FREE_CB)(T*)>
+template<typename T, T* (*FREE_CB)(T*)>
 class RawPointerWrapper {
 public:
-    RawPointerWrapper(T* raw) {
-        if (!raw)
+    RawPointerWrapper(T* raw):
+        raw_{std::shared_ptr<T>(raw, [] (auto* p) { FREE_CB(p); })}
+    {
+        if (!raw_)
             throw std::invalid_argument("tried to create RawPointerWrapper with NULL pointer");
-        raw_ = std::shared_ptr<T>(raw, FREE_CB);
     }
 
 protected:
     std::shared_ptr<T> raw_;
 };
+
+}
 }

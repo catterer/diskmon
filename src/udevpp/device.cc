@@ -4,20 +4,13 @@
 
 namespace udevpp {
 
-Device::Device(udev_device* uptr):
-    raw_(std::shared_ptr<udev_device>(uptr, udev_device_unref))
-{
-    if (!raw_)
-        throw std::invalid_argument("trying to create empty device");
-}
-
 auto Device::parent() const
     -> optional<Device>
 {
     auto p = udev_device_get_parent(raw_.get());
     if (!p)
         return {};
-    return Device{p};
+    return Device(p);
 }
 
 std::ostream& operator<<(std::ostream& out, optional<std::string> opts) {

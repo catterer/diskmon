@@ -9,6 +9,7 @@ include_directories(include)
 set(UDEVPP
     src/udev.cc
     src/monitor.cc
+    src/entry.cc
     src/device.cc)
 
 add_library(udevpp ${UDEVPP})

@@ -29,14 +29,27 @@ auto Device::fullinfo() const
     -> std::string
 {
     std::stringstream out;
-    out <<  "devpath   " << devpath   () << "\n";
-    out <<  "subsystem " << subsystem () << "\n";
-    out <<  "devtype   " << devtype   () << "\n";
-    out <<  "syspath   " << syspath   () << "\n";
-    out <<  "sysname   " << sysname   () << "\n";
-    out <<  "sysnum    " << sysnum    () << "\n";
-    out <<  "devnode   " << devnode   () << "\n";
-    out <<  "driver    " << driver    () << "\n";
+    out <<  "devpath   " << devpath()    << "\n";
+    out <<  "subsystem " << subsystem()  << "\n";
+    out <<  "devtype   " << devtype()    << "\n";
+    out <<  "syspath   " << syspath()    << "\n";
+    out <<  "sysname   " << sysname()    << "\n";
+    out <<  "sysnum    " << sysnum()     << "\n";
+    out <<  "devnode   " << devnode()    << "\n";
+    out <<  "driver    " << driver()     << "\n";
+
+    auto printlist = [&] (const char* name, const EntryList& l) {
+        if (l.empty())
+            return;
+        out << name << ":\n";
+        for (const auto& e: l)
+            out << "    " << e.second << "\n";
+    };
+
+    printlist("devlinks",    devlinks());
+    printlist("properties",  properties());
+    printlist("tags",        tags());
+    printlist("sysattrs",    sysattrs());
 
     return out.str();
 }

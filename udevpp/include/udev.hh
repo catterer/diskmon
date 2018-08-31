@@ -2,6 +2,7 @@
 
 #include <udevpp/util.hh>
 #include <udevpp/monitor.hh>
+#include <udevpp/entry.hh>
 
 #include <libudev.h>
 
@@ -12,6 +13,7 @@ public:
     Udev();
 
     auto create_monitor() const -> Monitor;
+    auto enumerate_devices() const -> EntryList;
 };
 
 }

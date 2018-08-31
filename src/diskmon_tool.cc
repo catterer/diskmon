@@ -4,6 +4,13 @@
 
 int main(int argc, char** argv) try {
     udevpp::Udev udev;
+
+    std::cout << "Existing devices:\n";
+    auto devices = udev.enumerate_devices();
+    for (const auto& d: devices)
+        std::cout << d.first << "\n";
+
+
     auto mon = udev.create_monitor();
 
     while (1) {

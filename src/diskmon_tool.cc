@@ -26,7 +26,7 @@ int main(int argc, char** argv) try {
         ret = select(mon.fd()+1, &fds, NULL, NULL, &tv);
         if (ret > 0 && FD_ISSET(mon.fd(), &fds)) {
             auto ev = mon.receive_event();
-            std::cout << "New device event '" << ev.action << "':\n" << ev.device.fullinfo() << "---\n";
+            std::cout << "New device event '" << ev.action << "': " << *ev.device.devpath() << "---\n";
         }
         /* 500 milliseconds */
         usleep(500*1000);

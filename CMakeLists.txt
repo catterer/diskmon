@@ -5,13 +5,9 @@ set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -g")
 project(diskmon)
 
 include_directories(include)
+include_directories(udevpp/include)
  
-set(UDEVPP
-    src/udevpp/udev.cc
-    src/udevpp/monitor.cc
-    src/udevpp/device.cc)
-
-add_library(udevpp ${UDEVPP})
+add_subdirectory(udevpp)
 
 add_executable(diskmon_tool src/diskmon_tool.cc)
 target_link_libraries(diskmon_tool udevpp)

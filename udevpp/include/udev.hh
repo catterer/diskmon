@@ -14,6 +14,7 @@ public:
 
     auto create_monitor() const -> Monitor;
     auto enumerate_devices() const -> EntryList;
+    auto find_device(const std::string& path) const -> optional<Device>;
 };
 
 }

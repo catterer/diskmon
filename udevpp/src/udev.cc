@@ -29,4 +29,13 @@ auto Udev::enumerate_devices() const
     return EntryList{devices};
 }
 
+auto Udev::find_device(const std::string& path) const
+    -> optional<Device>
+{
+    auto d = udev_device_new_from_syspath(raw_.get(), path.c_str());
+    if (!d)
+        return {};
+    return Device(d);
+}
+
 }

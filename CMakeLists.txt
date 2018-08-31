@@ -7,6 +7,8 @@ project(diskmon)
 include_directories(include)
  
 set(UDEVPP
+    src/udevpp/udev.cc
+    src/udevpp/monitor.cc
     src/udevpp/device.cc)
 
 add_library(udevpp ${UDEVPP})

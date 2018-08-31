@@ -4,6 +4,10 @@
 
 namespace udevpp {
 
+Device::Device(udev_device* d):
+     util::RawPointerWrapper<udev_device, udev_device_unref>::RawPointerWrapper(d)
+{ }
+
 auto Device::parent() const
     -> optional<Device>
 {

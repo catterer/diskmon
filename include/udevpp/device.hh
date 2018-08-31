@@ -28,13 +28,13 @@ public:
 private:
     template<const char* (*CB)(udev_device*)>
     auto get_str() const -> optional<std::string> {
-        auto p = CB(dev_.get());
+        auto p = CB(raw_.get());
         if (!p)
             return {};
         return {std::string(p)};
     }
 
-    std::shared_ptr<udev_device> dev_;
+    std::shared_ptr<udev_device> raw_;
 };
 
 }

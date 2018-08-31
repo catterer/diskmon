@@ -1,19 +1,16 @@
 #include <udevpp/udevpp.hh>
-#include <stdio.h>
 #include <unistd.h>
+#include <iostream>
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) try {
     struct udev *udev;
-    struct udev_device *dev;
-       struct udev_monitor *mon;
+    struct udev_monitor *mon;
     int fd;
 
     /* create udev object */
     udev = udev_new();
-    if (!udev) {
-        fprintf(stderr, "Can't create udev\n");
-        return 1;
-    }
+    if (!udev)
+        throw std::runtime_error("Failed to create udev");
 
     mon = udev_monitor_new_from_netlink(udev, "udev");
     udev_monitor_filter_add_match_subsystem_devtype(mon, "block", NULL);
@@ -32,18 +29,8 @@ int main(int argc, char** argv) {
 
         ret = select(fd+1, &fds, NULL, NULL, &tv);
         if (ret > 0 && FD_ISSET(fd, &fds)) {
-            dev = udev_monitor_receive_device(mon);
-            auto dev_ = udevpp::Device(dev);
-            if (dev) {
-                printf("I: ACTION=%s\n", udev_device_get_action(dev));
-                printf("I: DEVNAME=%s\n", udev_device_get_sysname(dev));
-                printf("I: DEVPATH=%s\n", udev_device_get_devpath(dev));
-                printf("I: MACADDR=%s\n", udev_device_get_sysattr_value(dev, "address"));
-                printf("---\n");
-
-                /* free dev */
-                udev_device_unref(dev);
-            }
+            auto dev = udevpp::Device(udev_monitor_receive_device(mon));
+            std::cout << "New device event:\n" << dev.fullinfo() << "---\n";
         }
         /* 500 milliseconds */
         usleep(500*1000);
@@ -51,5 +38,8 @@ int main(int argc, char** argv) {
     /* free udev */
     udev_unref(udev);
 
-    return 0;
+    return EXIT_SUCCESS;
+} catch (const std::exception& x) {
+    std::cerr << x.what() << "\n";
+    return EXIT_FAILURE;
 }
